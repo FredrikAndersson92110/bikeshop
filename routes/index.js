@@ -51,11 +51,13 @@ router.get('/', function(req, res, next) {
   if(req.session.dataCardBike == undefined) {
     req.session.dataCardBike = [];
   }
-    res.render('index', { dataBike:dataBike });
+  
+    res.render('index', { dataBike:dataBike, panier: req.session.dataCardBike });
 });
 
 // GET SHOP 
 router.get('/shop', function(req, res, next) {
+  let totalShop;
   if(req.session.dataCardBike == undefined) {
     req.session.dataCardBike = [];
   }
