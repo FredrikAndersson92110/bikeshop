@@ -19,14 +19,18 @@
 
             <!-- HEADER -->
             <div class="row">
-  
                 <nav class=" header col-12 navbar navbar-light bg-dark">
-                        <a class="navbar" href="/">
-                        <img src="/images/bike-logo.svg" width="50" height="50" class="logo" alt="">
-                        The Bike Shop Experience
+                    <a class="navbar" href="/">
+                    <img class="mx-3"  src="images/bicycle.png" width="50" height="50" class="logo" alt="">
+                    The Bike Shop Experience
+                    </a>
+                    <form class="form-inline my-2 my-lg-0">
+                        <a class="btn btn-warning mx-3 my-2 my-sm-0" href="/" type="submit">
+                            <i class="fas fa-angle-double-left"></i>
+                            Back
                         </a>
-                </nav>
-  
+                      </form>
+                </nav>  
             </div>  
             <div class="row ariane">
                 <nav aria-label="breadcrumb" class="col-12">
@@ -73,7 +77,7 @@
                                 <td>
                                     <form action="/update-shop" method="POST">
                                         <input type="hidden" name="position" value="<%=i%>">
-                                        <input type="text" name="quantity" value="<%= dataCardBike[i].quantity%>">
+                                        <input type="number" name="quantity" value="<%= dataCardBike[i].quantity%>">
                                         <button type="submit" class="btn btn-outline-info btn-sm" name="button"><i class="fas fa-sync-alt"></i></button>
                                     </form>
                                 </td>

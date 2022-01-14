@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/stylesheets/style.css">
     <link href="https://fonts.googleapis.com/css?family=Darker+Grotesque&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a41e9403cf.js" crossorigin="anonymous"></script>
     <title>BikeShop - Home</title>
     </head>
     <body>
@@ -18,9 +19,15 @@
 
                 <nav class=" header col-12 navbar navbar-light bg-dark">
                     <a class="navbar" href="/">
-                    <img src="/images/bike-logo.svg" width="50" height="50" class="logo" alt="">
+                    <img class="mx-3"  src="images/bicycle.png" width="50" height="50" class="logo" alt="">
                     The Bike Shop Experience
                     </a>
+                    <form class="form-inline my-2 my-lg-0">
+                        <a class="btn btn-warning mx-3 my-2 my-sm-0" href="/shop" type="submit">
+                            <i class="fas fa-shopping-basket"></i>
+                            Basket
+                        </a>
+                      </form>
                 </nav>
 
             </div>  
@@ -39,8 +46,8 @@
                 <% 
                 for(var i=0;i<dataBike.length;i++){
                 %>
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="card">
+                    <div class="col-xs-12 col-sm-6 col-md-4 my-3">
+                        <div class="card p-1 h-100">
                             <img src=<%= dataBike[i].url%> class="card-img-top">
                             <div class="card-body text-center">
                                 <h5 class="card-title"><%= dataBike[i].name%></h5>

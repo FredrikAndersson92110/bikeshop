@@ -1,7 +1,7 @@
 /* ------ Body ---- */
 
 body{
-    background-color: #ffffff;
+    background-color: rgba(252, 196, 188, 0.1);
     font-family: 'Darker Grotesque', sans-serif;
 } 
 
@@ -16,22 +16,37 @@ body{
 
 
 .navbar{
+    height: 5rem;
     padding:0px ;
     color: #FFFFFF;
     
 }
 
 .navbar:hover{
-    color: #FFFFFF;
+    color: #f5a16a !important;
 }
 
 .navbar:link{
     text-decoration:none;
+    font-size: 24px;
 }
 .logo{
     margin-left: 10px;
 }
 
+.btn-warning {
+    border-color: #F87C68 !important;
+    background-color: #F87C68 !important;
+    color: white !important;
+}
+
+.btn-warning:hover {
+    background-color: #d37263 !important;
+}
+
+.card img {
+    width: 100%;
+}
 
 /* ----- Shop page ---------- */
 
