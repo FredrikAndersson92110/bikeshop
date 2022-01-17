@@ -45,37 +45,36 @@
                     <div class="container">
                     </div>
                 </div>
-
             </div>
-
-
-            <!-- Carousel mise en avant -->
+            
+            <!-- card carousel -->
             <div class="row d-flex justify-content-center mt-3">
-                <div class="col-6">
-                    <h3 class="text-center">En ce moment :</h3>
-                <div class="bd-example">
-                    <div id="carouselMea" class="carousel slide" data-ride="carousel">
-                      <ol class="carousel-indicators">
-                        <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-                      </ol>
-                      <div class="carousel-inner">
-                        <% dataBike.forEach((bike, index) => { %>   
+            <div class="col-10 col-md-6">
+                <div id="carouselExampleSlidesOnly" class="carousel slide" data-ride="carousel">
+                    <div class="card text-center">
+                        <div class="card-header bg-info text-white ">
+                            <h3>En ce moment!</h3>
+                        </div>
+                        <div class="carousel-inner">
+                            <% dataBike.forEach((bike, index) => { %>   
                             <% if(bike.mea === true) { %>
-                                <div class="carousel-item <%= index == 0 ? "active" : "" %>">
-                                    <img src="<%= bike.url %>" class="d-block w-100">
-                                    <div class="carousel-caption d-none d-md-block p-0">
-                                    <a href="/shop?bikeNameFromFront=<%= bike.name%>&bikePriceFromFront=<%= bike.price%>&bikeImageFromFront=<%= bike.url%>"  id="mea-btn" class="btn btn-info">Buy</a>
-                                    <h5><strong><%= bike.price %> € </strong></h5>
-                                </div>
-                                </div>
-                            <% } %>
-                        <% }); %> 
-                      </div>
-                    </div>
-                </div>
+                          <div class="carousel-item <%= index == 0 ? "active" : "" %>">
+                              <img src="<%= bike.url %>" class="d-block w-100">
+                              <div class="card-body">
+                                <h5 class="card-title"><%= bike.name %></h5>
+                                <h5 class="card-title"><%= bike.price %> €</h5>  
+                                <a href="/shop?bikeNameFromFront=<%= bike.name%>&bikePriceFromFront=<%= bike.price%>&bikeImageFromFront=<%= bike.url%>" id="mea-btn" class="btn btn-lg btn-info">Buy Now!</a>
+                              </div>
+                          </div>
+                <% } %>
+                <% }); %> 
             </div>
-            </div>
-            <!-- end -->
+        </div>
+    </div>
+              </div>    
+              </div>
+              <!-- end -->
+
 
             <div class="row">
                 <% 
