@@ -63,7 +63,7 @@
                               <div class="card-body">
                                 <h5 class="card-title"><%= bike.name %></h5>
                                 <h5 class="card-title"><%= bike.price %> €</h5>  
-                                <a href="/shop?bikeNameFromFront=<%= bike.name%>&bikePriceFromFront=<%= bike.price%>&bikeImageFromFront=<%= bike.url%>" id="mea-btn" class="btn btn-lg btn-info">Buy Now!</a>
+                                <a href="/add-shop?bikeNameFromFront=<%= bike.name%>&bikePriceFromFront=<%= bike.price%>&bikeImageFromFront=<%= bike.url%>" id="mea-btn" class="btn btn-lg btn-info">Buy Now!</a>
                               </div>
                           </div>
                 <% } %>
@@ -86,7 +86,7 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title"><%= dataBike[i].name%></h5>
                                 <%= dataBike[i].price%>€
-                                <a href="/shop?bikeNameFromFront=<%= dataBike[i].name%>&bikePriceFromFront=<%= dataBike[i].price%>&bikeImageFromFront=<%= dataBike[i].url%>" class="btn btn-outline-info btn-sm">Buy</a>
+                                <a href="/add-shop?bikeNameFromFront=<%= dataBike[i].name%>&bikePriceFromFront=<%= dataBike[i].price%>&bikeImageFromFront=<%= dataBike[i].url%>" class="btn btn-outline-info btn-sm">Buy</a>
                             </div>
                         </div>
                     </div>

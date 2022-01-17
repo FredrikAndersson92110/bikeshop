@@ -64,9 +64,6 @@
                     </thead>
                     <tbody>
                         <% 
-                        let totalFrais = 0;
-                        var totalCmd = 0;
-                        let message = "";
                         for(var i=0;i<dataCardBike.length;i++){
                         %>
                             <tr class="basket-item">
@@ -84,27 +81,9 @@
                                 </td>
                                 <td><%= dataCardBike[i].price %>€</td>
                                 <td><%= dataCardBike[i].price * dataCardBike[i].quantity %>€</td>
-                                <td><a href="/delete-shop?position=<%=i%>"><button class="btn btn-outline-info btn-sm" name="button"><i class="far fa-trash-alt"></i></button></a></td>
+                                <td><a href="/delete-shop/<%=i%>"><button class="btn btn-outline-info btn-sm" name="button"><i class="far fa-trash-alt"></i></button></a></td>
                             </tr>
-                        <%
-                            totalCmd += dataCardBike[i].price * dataCardBike[i].quantity;
-                            
-                            if(totalCmd < 2000) {
-                                totalFrais += dataCardBike[i].quantity * 30;
-                            }
-                            if (totalCmd > 2000) {
-                               totalFrais += dataCardBike[i].quantity * 30;
-                               console.log(totalFrais);
-                                totalFrais = totalFrais / 2;
-                                message = "50% de réduction"
-                            } 
-                            if (totalCmd > 4000) {
-                                totalFrais = 0;
-                                message = "Frais de port offerts"
-                            }
-                        }
-                        %>
-                        
+                        <% }%> 
                       <tr>
                         <th scope="row"></th>
                         <td></td>
@@ -121,7 +100,7 @@
                         <td></td>
                         <td></td>
                         <td class="total-box">Frais de port : </td>
-                        <td><%= totalFrais %>€</td>
+                        <td><%= shippingFees %>€</td>
                         <td><%= message %></td>
                       </tr>
                     </tbody>
@@ -129,8 +108,7 @@
             </div>
             <div class="row">
                 <div class="col-12 text-right">
-                    <form action="/create-checkout-session" method="POST">
-                        <input name="frais" type="hidden" value="<%= totalFrais %>">
+                    <form action="/create-checkout-session/<%= shippingFees %>" method="POST">
                         <button class="btn btn-outline-info btn-sm btn-checkout" name="button-checkout" type="submit">Checkout</button>
                     </form>
                 </div>
@@ -140,6 +118,5 @@
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
     </body>
 </html>
