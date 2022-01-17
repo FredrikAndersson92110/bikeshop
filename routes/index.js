@@ -7,6 +7,7 @@ dotenv.config();
 //SETUP STRIPE SETTINGS
 const stripe = require('stripe')(process.env.SECRET_KEY);
 
+//Stripe Checkout Route
 router.post('/create-checkout-session', async (req, res) => {
   let priceData = [] 
   // Check basket 
@@ -25,8 +26,25 @@ router.post('/create-checkout-session', async (req, res) => {
       priceData.push(newProduct)
     });
 
+    // Send Shipping Fees 
+    let shippingOptions = [];
+    let amount = Number(req.body.frais);
+
+    shippingOptions.push(
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: {
+            amount: amount * 100,
+            currency: 'eur',
+          },
+          display_name: "Frais de port",
+        }
+      }
+    )
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
+    shipping_options: shippingOptions,
     line_items: priceData,
     mode: 'payment',
     success_url: 'https://thebestbikeshop.herokuapp.com/success',
@@ -57,7 +75,7 @@ router.get('/', function(req, res, next) {
 
 // GET SHOP 
 router.get('/shop', function(req, res, next) {
-  let totalShop;
+
   if(req.session.dataCardBike == undefined) {
     req.session.dataCardBike = [];
   }

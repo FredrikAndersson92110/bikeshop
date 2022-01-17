@@ -30,24 +30,25 @@
                         </a>
                     </form>
                 </nav>  
-
-            <div class="row ariane">
-                <nav aria-label="breadcrumb" class="col-12">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Basket</li>
-                    </ol>
-                </nav>
+            <div class="container-fluid">
+                <div class="row ariane">
+                    <nav aria-label="breadcrumb" class="col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Shop</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Basket</li>
+                        </ol>
+                    </nav>
+                </div>
+                <h1>Basket</h1>
             </div>
 
 
-            <h1>Basket</h1>
-
                 <% if(dataCardBike.length === 0) { %>
-                <div>
-                    <h4 class="text-danger">No article in the basket</h4>
-                </div>
+                    <div class="container-fluid">
+                        <h4 class="text-danger">No article in the basket</h4>
+                    </div>
                 <% } else { %>
+                <div class="container-fluid">
                 <div class="row">                
                 <table class="table">
                     <thead>
@@ -63,8 +64,9 @@
                     </thead>
                     <tbody>
                         <% 
-
+                        let totalFrais = 0;
                         var totalCmd = 0;
+                        let message = "";
                         for(var i=0;i<dataCardBike.length;i++){
                         %>
                             <tr class="basket-item">
@@ -86,7 +88,20 @@
                             </tr>
                         <%
                             totalCmd += dataCardBike[i].price * dataCardBike[i].quantity;
-                            // or totalCmd = dataCardBike[i].price * dataCardBike[i].quantity + totalCmd;
+                            
+                            if(totalCmd < 2000) {
+                                totalFrais += dataCardBike[i].quantity * 30;
+                            }
+                            if (totalCmd > 2000) {
+                               totalFrais += dataCardBike[i].quantity * 30;
+                               console.log(totalFrais);
+                                totalFrais = totalFrais / 2;
+                                message = "50% de réduction"
+                            } 
+                            if (totalCmd > 4000) {
+                                totalFrais = 0;
+                                message = "Frais de port offerts"
+                            }
                         }
                         %>
                         
@@ -100,18 +115,29 @@
                         <td><%= totalCmd %>€</td>
                         <td></td>
                       </tr>
+
+                      <tr>
+                        <th scope="row"></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="total-box">Frais de port : </td>
+                        <td><%= totalFrais %>€</td>
+                        <td><%= message %></td>
+                      </tr>
                     </tbody>
                 </table>
             </div>
             <div class="row">
                 <div class="col-12 text-right">
                     <form action="/create-checkout-session" method="POST">
+                        <input name="frais" type="hidden" value="<%= totalFrais %>">
                         <button class="btn btn-outline-info btn-sm btn-checkout" name="button-checkout" type="submit">Checkout</button>
                     </form>
                 </div>
             </div>
-            <% } %> 
         </div>
+            <% } %> 
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
