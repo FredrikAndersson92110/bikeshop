@@ -47,6 +47,23 @@
                     <div class="container-fluid">
                         <h4 class="text-danger">No article in the basket</h4>
                     </div>
+                    <!-- Flexbox container for aligning the toasts -->
+                    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center" style="min-height: 200px;">
+
+                        <!-- Then put toasts within -->
+                        <div class="toast w-100 bg-light" data-autohide="false" role="alert" aria-live="assertive" aria-atomic="true" style="height: auto;">
+                        <div class="toast-header">
+                            <strong class="mr-auto">Panier vide ...</strong>
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="toast-body">
+                            <h3>Vous n'avez aucun vélo dans votre panier... </h3>
+                        </div>
+                        </div>
+                    </div>
+
                 <% } else { %>
                 <div class="container-fluid">
                 <div class="row">                
@@ -118,5 +135,6 @@
         
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="/javascripts/script.js"></script>
     </body>
 </html>
