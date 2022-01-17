@@ -80,5 +80,18 @@ body{
     font-weight: bold;
 }
 
+/* Carousel MEA */
 
 
+#mea-btn {
+    color: white;
+    border: none !important;
+}
+
+#mea {
+    background-color: burlywood;
+}
+
+.carousel-caption { 
+    color: black !important;
+}

@@ -48,12 +48,41 @@
 
             </div>
 
+
+            <!-- Carousel mise en avant -->
+            <div class="row d-flex justify-content-center mt-3">
+                <div class="col-6">
+                    <h3 class="text-center">En ce moment :</h3>
+                <div class="bd-example">
+                    <div id="carouselMea" class="carousel slide" data-ride="carousel">
+                      <ol class="carousel-indicators">
+                        <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+                      </ol>
+                      <div class="carousel-inner">
+                        <% dataBike.forEach((bike, index) => { %>   
+                            <% if(bike.mea === true) { %>
+                                <div class="carousel-item <%= index == 0 ? "active" : "" %>">
+                                    <img src="<%= bike.url %>" class="d-block w-100">
+                                    <div class="carousel-caption d-none d-md-block p-0">
+                                    <a href="/shop?bikeNameFromFront=<%= bike.name%>&bikePriceFromFront=<%= bike.price%>&bikeImageFromFront=<%= bike.url%>"  id="mea-btn" class="btn btn-info">Buy</a>
+                                    <h5><strong><%= bike.price %> € </strong></h5>
+                                </div>
+                                </div>
+                            <% } %>
+                        <% }); %> 
+                      </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <!-- end -->
+
             <div class="row">
                 <% 
                 for(var i=0;i<dataBike.length;i++){
                 %>
                     <div class="col-12 col-md-6 col-lg-4 my-3">
-                        <div class="card p-1 h-100">
+                        <div class="card p-1 h-100 shadow p-3 mb-5 bg-white rounded">
                             <img src=<%= dataBike[i].url%> class="card-img-top">
                             <div class="card-body text-center">
                                 <h5 class="card-title"><%= dataBike[i].name%></h5>
