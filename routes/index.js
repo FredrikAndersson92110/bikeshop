@@ -1,20 +1,11 @@
 const express = require('express');
 const dotenv = require("dotenv"); 
 var router = express.Router();
-
+const calculateTotal = require("./amount");
+const dataBike = require("./dataBike");
 dotenv.config(); 
-
 //SETUP STRIPE SETTINGS
 const stripe = require('stripe')(process.env.SECRET_KEY);
-
-var dataBike = [
-  {mea: true, name:"BIK045", url:"/images/ruff.jpg", price:679},
-  {mea: false, name:"ZOOK07", url:"/images/velo-electrique.jpg", price:999},
-  {mea: true, name:"TITANS", url:"/images/velobecan.jpg", price:799},
-  {mea: false, name:"CEWO", url:"/images/fixie.jpg", price:1300},
-  {mea: true, name:"AMIG039", url:"/images/peugeot.jpg", price:479},
-  {mea: false, name:"LIK099", url:"/images/brompton.jpg", price:869},
-]
 
 // Initialize session
 function sessionInit(req) {
@@ -83,30 +74,11 @@ router.get('/', function(req, res, next) {
 // GET SHOP 
 router.get('/shop', (req, res) => {
   sessionInit(req);
-
-  let totalCmd = 0; 
-  let shippingFees = 0;
-  let message;  
-
-  for (let i in req.session.dataCardBike) {
-    let subTotal = req.session.dataCardBike[i].quantity * req.session.dataCardBike[i].price;
-      totalCmd += subTotal; 
-      shippingFees += Number(req.session.dataCardBike[i].quantity) * 30; 
-  }
-
-  if(totalCmd >= 4000) {
-    shippingFees = 0;
-    message = "Frais de port offerts";
-  } else if (totalCmd >= 2000) {
-    shippingFees = shippingFees / 2;
-    message = "Frais moins 50%"
-  }
+  let amount = calculateTotal(req.session.dataCardBike);
 
   res.render('shop', {
     dataCardBike: req.session.dataCardBike, 
-    shippingFees, 
-    totalCmd,
-    message 
+    amount, 
   });
 });
 
@@ -160,6 +132,34 @@ router.get("/success", (req, res) => {
 
 router.get("/cancel", (req, res) => {
   res.render("cancel"); 
+});
+
+// Select delivery
+router.get("/shop/delivery/:selDelivery", (req, res) => {
+  sessionInit(req);
+
+  console.log(req.params.selDelivery);
+
+  if(req.params.selDelivery === "standard") {
+    deliveryFees = 0;
+  }
+  if(req.params.selDelivery === "express") {
+    deliveryFees = 0;
+    deliveryFees += 100;
+  }
+  if(req.params.selDelivery === "relais") {
+      deliveryFees = 0;
+      let quantity = 0;
+      for(let i = 0; i < req.session.dataCardBike.length; i++) {
+        quantity += Number(req.session.dataCardBike.quantity);
+      }
+      if(quantity === 1) {
+        deliveryFees += 50;   
+      } else {
+        deliveryFees += 20; 
+      }
+  }
+  res.redirect("/shop");
 });
 
 module.exports = router;
