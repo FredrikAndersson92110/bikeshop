@@ -77,6 +77,7 @@ router.get('/shop', (req, res) => {
   let amount = calculateTotal(req.session.dataCardBike);
 
   res.render('shop', {
+    dataBike, 
     dataCardBike: req.session.dataCardBike, 
     amount, 
   });
@@ -89,7 +90,10 @@ router.get("/add-shop", (req, res) => {
   let alreadyExist = false; 
   req.session.dataCardBike.forEach(bike => {
     if (bike.name == req.query.bikeNameFromFront) {
-      bike.quantity = Number(bike.quantity + 1); 
+      bike.quantity = Number(bike.quantity) + 1; 
+      let index = dataBike.findIndex(bike => bike.name === req.query.bikeNameFromFront);
+      dataBike[index].stock -= 1; 
+      console.log(dataBike[index].stock);
       alreadyExist = true;
     }
   });
@@ -101,6 +105,9 @@ router.get("/add-shop", (req, res) => {
       price: req.query.bikePriceFromFront,
       quantity: 1
     });
+    let index = dataBike.findIndex(bike => bike.name === req.query.bikeNameFromFront);
+    dataBike[index].stock -= 1; 
+    console.log(dataBike[index].stock);
   }
 
   res.redirect("/shop");
@@ -109,6 +116,9 @@ router.get("/add-shop", (req, res) => {
 // Update quantity
 router.post('/update-shop', function(req, res, next){
   sessionInit(req);
+
+  let index = dataBike.findIndex(bike => bike.name === req.body.name);
+  dataBike[index].stock -= 1; 
 
   var position = req.body.position;
   var newQuantity = req.body.quantity;

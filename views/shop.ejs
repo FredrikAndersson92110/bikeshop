@@ -93,8 +93,13 @@
                                 <td>
                                     <form action="/update-shop" method="POST">
                                         <input type="hidden" name="position" value="<%=i%>">
+                                        <% let index = dataBike.findIndex(bike => bike.name === dataCardBike[i].name) %>
                                         <input type="number" name="quantity" value="<%= dataCardBike[i].quantity%>">
-                                        <button type="submit" class="btn btn-outline-info btn-sm" name="button"><i class="fas fa-sync-alt"></i></button>
+                                        <input type="hidden" name="name" value="<%= dataCardBike[i].name %>">
+                                        <button type="submit" class="btn btn-outline-info btn-sm" name="button" <%= dataBike[index].stock >= dataCardBike[i].quantity ? "" : "disabled" %>><i class="fas fa-sync-alt"></i></button>
+                                        <small id="passwordHelpBlock" class="form-text text-muted">
+                                            <%= dataBike[index].stock >= dataCardBike[i].quantity ? "" : "Rupture de stock" %>
+                                        </small>
                                     </form>
                                 </td>
                                 <td><%= dataCardBike[i].price %>€</td>
