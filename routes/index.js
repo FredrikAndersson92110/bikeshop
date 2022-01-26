@@ -1,38 +1,34 @@
 const express = require('express');
 const dotenv = require("dotenv"); 
 var router = express.Router();
+const ProductModel = require("../models/products")
 const calculateTotal = require("./amount");
 const dataBike = require("./dataBike");
+const getPriceData = require("./stripe"); 
 dotenv.config(); 
 //SETUP STRIPE SETTINGS
 const stripe = require('stripe')(process.env.SECRET_KEY);
 
-// Initialize session
+// FUNCTIONS 
+//Init session
 function sessionInit(req) {
   if(req.session.dataCardBike == undefined) {
     req.session.dataCardBike = [];
   }
 }
 
+//checkstock
+function updateStock(request) {
+  let index = dataBike.findIndex(bike => bike.name === request);
+  dataBike[index].stock -= 1;    
+}
+
 //Stripe Checkout Route
 router.post('/create-checkout-session/:shippingFees', async (req, res) => {
-  let priceData = [] 
-  // Check basket 
-  req.session.dataCardBike.forEach(item => {
-    let newProduct =
-      {
-        price_data: {
-          currency: 'eur',
-          product_data: {
-            name: item.name,
-          },
-          unit_amount: Number(item.price) * 100,
-        },
-        quantity: Number(item.quantity),
-      }
-      priceData.push(newProduct)
-    });
-
+  console.log(req.session.dataCardBike);
+  let priceData = []
+  priceData = getPriceData(req.session.dataCardBike); 
+  console.log(priceData);
     // Send Shipping Fees 
     let shippingOptions = [];
     let amount = Number(req.params.shippingFees);
@@ -62,16 +58,28 @@ router.post('/create-checkout-session/:shippingFees', async (req, res) => {
  
   res.redirect(303, session.url);
  });
- // end stripe
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  sessionInit(req);
-    res.render('index', { dataBike:dataBike, panier: req.session.dataCardBike });
+ // Confirmation pages 
+router.get("/success", (req, res) => {
+  res.render("success"); 
 });
 
+router.get("/cancel", (req, res) => {
+  res.render("cancel"); 
+});
 
-// GET SHOP 
+ // --------- end stripe ----------------
+
+
+
+// ------------- HOME -----------------
+router.get('/', async function(req, res, next) {
+  sessionInit(req);
+  let products = await ProductModel.find(); 
+    res.render('index', { dataBike:products, panier: req.session.dataCardBike });
+});
+
+// --------------- SHOP ------------- 
 router.get('/shop', (req, res) => {
   sessionInit(req);
   let amount = calculateTotal(req.session.dataCardBike);
@@ -83,7 +91,7 @@ router.get('/shop', (req, res) => {
   });
 });
 
-// Add shop 
+// -------------ADD BIKE-------------------
 router.get("/add-shop", (req, res) => {
   sessionInit(req); 
 
@@ -91,9 +99,7 @@ router.get("/add-shop", (req, res) => {
   req.session.dataCardBike.forEach(bike => {
     if (bike.name == req.query.bikeNameFromFront) {
       bike.quantity = Number(bike.quantity) + 1; 
-      let index = dataBike.findIndex(bike => bike.name === req.query.bikeNameFromFront);
-      dataBike[index].stock -= 1; 
-      console.log(dataBike[index].stock);
+      updateStock(req.query.bikeNameFromFront); 
       alreadyExist = true;
     }
   });
@@ -105,20 +111,15 @@ router.get("/add-shop", (req, res) => {
       price: req.query.bikePriceFromFront,
       quantity: 1
     });
-    let index = dataBike.findIndex(bike => bike.name === req.query.bikeNameFromFront);
-    dataBike[index].stock -= 1; 
-    console.log(dataBike[index].stock);
+    updateStock(req.query.bikeNameFromFront); 
   }
-
   res.redirect("/shop");
 });
 
-// Update quantity
+// ------------UPDATE QUANTITY-------------- 
 router.post('/update-shop', function(req, res, next){
   sessionInit(req);
-
-  let index = dataBike.findIndex(bike => bike.name === req.body.name);
-  dataBike[index].stock -= 1; 
+  updateStock(req.body.name);
 
   var position = req.body.position;
   var newQuantity = req.body.quantity;
@@ -127,28 +128,16 @@ router.post('/update-shop', function(req, res, next){
 });
 
 
-// Delete bike
+// ----------- DELETE -------------
 router.get('/delete-shop/:position', function(req, res, next){
   sessionInit(req);
   req.session.dataCardBike.splice(req.params.position, 1);
   res.redirect("/shop");
 });
 
-
-// STRIPE PAYMENT ROUTES
-router.get("/success", (req, res) => {
-  res.render("success"); 
-});
-
-router.get("/cancel", (req, res) => {
-  res.render("cancel"); 
-});
-
-// Select delivery
+// --------------- DELIVERY ---------------
 router.get("/shop/delivery/:selDelivery", (req, res) => {
   sessionInit(req);
-
-  console.log(req.params.selDelivery);
 
   if(req.params.selDelivery === "standard") {
     deliveryFees = 0;
@@ -170,6 +159,22 @@ router.get("/shop/delivery/:selDelivery", (req, res) => {
       }
   }
   res.redirect("/shop");
+});
+
+router.get("/create-bike", (req, res) => {
+    res.render("create-bike");
+});
+
+router.post("/create-bike", async (req, res) => {
+  let newBikeStock = new ProductModel({
+    name: req.body.model,
+    url: req.body.imgURL, 
+    price: req.body.price,
+    stock: req.body.stock
+  });
+  let savedBikeStock = await newBikeStock.save();
+
+  res.redirect("/");
 });
 
 module.exports = router;
